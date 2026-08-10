@@ -1,13 +1,19 @@
 export default function Home() {
   return (
-    <main className="home">
-
+    <main>
       <nav className="navbar">
         <div className="logo">VORPIUM</div>
 
         <div className="nav-links">
           <a href="#about">About</a>
-          <a href="#discord">Discord</a>
+
+          <a
+            href="https://discord.gg/vAQ2XfGkyk"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Discord
+          </a>
         </div>
       </nav>
 
@@ -23,8 +29,10 @@ export default function Home() {
         </p>
 
         <div className="buttons">
-
-          <a href="/api/auth/discord" className="button primary">
+          <a
+            href="/api/auth/discord"
+            className="button primary"
+          >
             PLAY NOW
           </a>
 
@@ -36,7 +44,6 @@ export default function Home() {
           >
             PLAY ON DISCORD
           </a>
-          
         </div>
       </section>
 
@@ -46,7 +53,6 @@ export default function Home() {
         <h2>Everyone's story. Help shape it.</h2>
 
         <div className="cards">
-
           <div className="card">
             <h3>Story</h3>
             <p>
@@ -67,13 +73,12 @@ export default function Home() {
               Continue your adventure through the Vorpium Discord bot.
             </p>
           </div>
-
         </div>
+      </section>
 
       <footer>
         © 2026 Vorpium
       </footer>
-
     </main>
   );
 }
