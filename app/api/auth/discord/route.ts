@@ -14,38 +14,25 @@ const SITE_URL =
 
 export async function GET(request: NextRequest) {
   try {
-    if (!DISCORD_CLIENT_ID) {`
+    if (!DISCORD_CLIENT_ID) {
       return NextResponse.json(
         { error: "DISCORD_CLIENT_ID is not configured" },
         { status: 500 }
       );
     }
 
-    /*
-     * Check whether the player already has a valid
-     * Vorpium session.
-     */
     const sessionToken = request.cookies.get(
       SESSION_COOKIE_NAME
     )?.value;
 
     const discordId = verifySessionToken(sessionToken);
 
-    /*
-     * Returning player:
-     * They already authenticated with Discord.
-     * Don't make them authorize again.
-     */
     if (discordId) {
       return NextResponse.redirect(
         new URL("/play", SITE_URL)
       );
     }
 
-    /*
-     * New player:
-     * Send them to Discord OAuth.
-     */
     const redirectUri =
       `${SITE_URL}/api/auth/discord/callback`;
 
