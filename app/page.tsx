@@ -23,7 +23,12 @@ export default function Home() {
         </p>
 
         <div className="buttons">
-          <a href="/play" className="button primary">
+
+          <a href="/api/auth/discord/start" className="btn">
+            Login with Discord
+          </a>
+
+          <a href="/api/auth/discord/start" className="button primary">
             PLAY NOW
           </a>
 
