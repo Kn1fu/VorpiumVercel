@@ -28,9 +28,15 @@ export default function Home() {
             PLAY NOW
           </a>
 
-          <a href="#discord" className="button secondary">
+          <a
+            href="https://discord.gg/vAQ2XfGkyk"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="button secondary"
+          >
             PLAY ON DISCORD
           </a>
+          
         </div>
       </section>
 
@@ -63,19 +69,6 @@ export default function Home() {
           </div>
 
         </div>
-      </section>
-
-      <section id="discord" className="discord">
-        <h2>Ready to enter Vorpium?</h2>
-
-        <p>
-          Start your adventure and discover where your choices take you.
-        </p>
-
-        <a href="#" className="button primary">
-          JOIN DISCORD
-        </a>
-      </section>
 
       <footer>
         © 2026 Vorpium
