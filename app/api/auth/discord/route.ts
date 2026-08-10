@@ -47,14 +47,12 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Failed to fetch user info" }, { status: 400 });
     }
 
-    // Store/update Discord info immediately so the profile page shows
-    // the username even before Minecraft is linked.
     await pool.query(
-      `INSERT INTO linked_users (discord_id, discord_name, discord_avatar, minecraft_name, linked_at)
-       VALUES ($1, $2, $3, '', NOW())
+      `INSERT INTO users (discord_id, username, avatar, created_at, last_login)
+       VALUES ($1, $2, $3, NOW(), NOW())
        ON CONFLICT (discord_id) DO UPDATE SET
-         discord_name = EXCLUDED.discord_name,
-         discord_avatar = EXCLUDED.discord_avatar`,
+         username = EXCLUDED.username,
+         avatar = EXCLUDED.avatar`,
       [userData.id, userData.username, userData.avatar || null]
     );
 
