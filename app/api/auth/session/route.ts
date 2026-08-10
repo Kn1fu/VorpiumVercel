@@ -1,4 +1,3 @@
-```ts
 import { NextRequest, NextResponse } from "next/server";
 import pool from "lib/db";
 import {
@@ -63,4 +62,3 @@ export async function GET(request: NextRequest) {
     );
   }
 }
-```
