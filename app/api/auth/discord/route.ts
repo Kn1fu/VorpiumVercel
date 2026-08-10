@@ -25,7 +25,7 @@ export async function POST(request: NextRequest) {
         client_secret: DISCORD_CLIENT_SECRET,
         grant_type: "authorization_code",
         code,
-        redirect_uri: `${process.env.NEXT_PUBLIC_SITE_URL || "https://soundwavessmp.vercel.app"}/connect`,
+        redirect_uri: `${process.env.NEXT_PUBLIC_SITE_URL || "https://vorpium.vercel.app"}/connect`,
       }),
     });
 
