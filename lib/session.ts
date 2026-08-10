@@ -8,6 +8,7 @@ function getSecret(): string {
       "AUTH_SECRET is not set. Generate one (e.g. `openssl rand -hex 32`) and add it to your environment variables."
     );
   }
+
   return SECRET;
 }
 
@@ -16,79 +17,109 @@ function base64url(input: Buffer | string): string {
 }
 
 function sign(payload: string): string {
-  return crypto.createHmac("sha256", getSecret()).update(payload).digest("base64url");
+  return crypto
+    .createHmac("sha256", getSecret())
+    .update(payload)
+    .digest("base64url");
 }
 
 export interface TokenPayload {
   discordId: string;
-  purpose: "link_ticket" | "session";
+  purpose: "session";
   iat: number;
   exp: number;
 }
 
-export function createToken(discordId: string, purpose: TokenPayload["purpose"], ttlSeconds: number): string {
+export function createToken(
+  discordId: string,
+  ttlSeconds: number
+): string {
+  const now = Math.floor(Date.now() / 1000);
+
   const payload: TokenPayload = {
     discordId,
-    purpose,
-    iat: Math.floor(Date.now() / 1000),
-    exp: Math.floor(Date.now() / 1000) + ttlSeconds,
+    purpose: "session",
+    iat: now,
+    exp: now + ttlSeconds,
   };
+
   const encoded = base64url(JSON.stringify(payload));
-  const sig = sign(encoded);
-  return `${encoded}.${sig}`;
+  const signature = sign(encoded);
+
+  return `${encoded}.${signature}`;
 }
 
-export function verifyToken(token: string | null | undefined, expectedPurpose: TokenPayload["purpose"]): TokenPayload | null {
-  if (!token || typeof token !== "string" || !token.includes(".")) return null;
+export function verifyToken(
+  token: string | null | undefined
+): TokenPayload | null {
+  if (!token || typeof token !== "string" || !token.includes(".")) {
+    return null;
+  }
 
-  const [encoded, sig] = token.split(".");
-  if (!encoded || !sig) return null;
+  const [encoded, signature] = token.split(".");
 
-  let expectedSig: string;
+  if (!encoded || !signature) {
+    return null;
+  }
+
+  let expectedSignature: string;
+
   try {
-    expectedSig = sign(encoded);
+    expectedSignature = sign(encoded);
   } catch {
     return null;
   }
 
-  const sigBuf = Buffer.from(sig);
-  const expectedBuf = Buffer.from(expectedSig);
-  if (sigBuf.length !== expectedBuf.length || !crypto.timingSafeEqual(sigBuf, expectedBuf)) {
+  const signatureBuffer = Buffer.from(signature);
+  const expectedBuffer = Buffer.from(expectedSignature);
+
+  if (
+    signatureBuffer.length !== expectedBuffer.length ||
+    !crypto.timingSafeEqual(signatureBuffer, expectedBuffer)
+  ) {
     return null;
   }
 
   let payload: TokenPayload;
+
   try {
-    payload = JSON.parse(Buffer.from(encoded, "base64url").toString("utf8"));
+    payload = JSON.parse(
+      Buffer.from(encoded, "base64url").toString("utf8")
+    );
   } catch {
     return null;
   }
 
-  if (payload.purpose !== expectedPurpose) return null;
-  if (typeof payload.exp !== "number" || Math.floor(Date.now() / 1000) > payload.exp) return null;
-  if (typeof payload.discordId !== "string" || !payload.discordId) return null;
+  if (payload.purpose !== "session") {
+    return null;
+  }
+
+  if (
+    typeof payload.exp !== "number" ||
+    Math.floor(Date.now() / 1000) > payload.exp
+  ) {
+    return null;
+  }
+
+  if (typeof payload.discordId !== "string" || !payload.discordId) {
+    return null;
+  }
 
   return payload;
 }
 
 export const SESSION_COOKIE_NAME = "vorpium_session";
+
 export const SESSION_TTL_SECONDS = 60 * 60 * 24 * 90; // 90 days
-export const LINK_TICKET_TTL_SECONDS = 60 * 10; // 10 minutes
 
 export function createSessionToken(discordId: string): string {
-  return createToken(discordId, "session", SESSION_TTL_SECONDS);
+  return createToken(discordId, SESSION_TTL_SECONDS);
 }
 
-export function createLinkTicket(discordId: string): string {
-  return createToken(discordId, "link_ticket", LINK_TICKET_TTL_SECONDS);
-}
+export function verifySessionToken(
+  token: string | null | undefined
+): string | null {
+  const payload = verifyToken(token);
 
-export function verifySessionToken(token: string | null | undefined): string | null {
-  const payload = verifyToken(token, "session");
-  return payload ? payload.discordId : null;
-}
-
-export function verifyLinkTicket(token: string | null | undefined): string | null {
-  const payload = verifyToken(token, "link_ticket");
   return payload ? payload.discordId : null;
 }
