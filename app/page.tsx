@@ -24,11 +24,7 @@ export default function Home() {
 
         <div className="buttons">
 
-          <a href="/api/auth/discord" className="btn">
-            Login with Discord
-          </a>
-
-          <a href="/api/auth/discord/start" className="button primary">
+          <a href="/api/auth/discord" className="button primary">
             PLAY NOW
           </a>
 
