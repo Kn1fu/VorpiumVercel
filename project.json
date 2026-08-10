@@ -1,0 +1,14 @@
+{
+    "name": "Vorpium",
+    "version": "1.0.0",
+    "description": "Vorpium's project",
+    "main": "index.js",
+    "scripts": {
+        "start": "node index.js"
+    },
+    "dependencies": {
+        "discord.js": "^14.0.0",
+        "dotenv": "^17.0.0",
+        "pg": "^8.0.0"
+    }
+}
