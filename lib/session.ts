@@ -1,11 +1,11 @@
 import crypto from "crypto";
 
-const SECRET = process.env.AUTH_SECRET;
+const SECRET = process.env.SESSION_SECRET;
 
 function getSecret(): string {
   if (!SECRET) {
     throw new Error(
-      "AUTH_SECRET is not set. Generate one (e.g. `openssl rand -hex 32`) and add it to your environment variables."
+      "SESSION_SECRET is not set. Generate one (e.g. `openssl rand -hex 32`) and add it to your environment variables."
     );
   }
 
