@@ -1,26 +1,30 @@
 {
-  "name": "vorpium",
+  "name": "featherquest",
   "version": "1.0.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "bot": "tsx bot/index.ts",
+    "bot:dev": "tsx watch bot/index.ts"
   },
   "dependencies": {
+    "discord.js": "^14.27.0",
     "next": "^16.0.0",
     "pg": "^8.0.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
   },
   "devDependencies": {
-    "@types/pg": "^8.11.10",
     "@types/node": "^22.0.0",
+    "@types/pg": "^8.11.10",
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
     "eslint": "^9.0.0",
     "eslint-config-next": "^16.0.0",
+    "tsx": "^4.23.12",
     "typescript": "^5.0.0"
   }
 }

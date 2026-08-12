@@ -2,7 +2,7 @@ export default function Home() {
   return (
     <main>
       <nav className="navbar">
-        <div className="logo">VORPIUM</div>
+        <div className="logo">FEATHER QUEST</div>
 
         <div className="nav-links">
           <a href="#about">About</a>
@@ -20,10 +20,10 @@ export default function Home() {
       <section className="hero">
         <p className="eyebrow">YOUR ADVENTURE AWAITS</p>
 
-        <h1>VORPIUM</h1>
+        <h1>FEATHER QUEST</h1>
 
         <p className="subtitle">
-          A story shaped by everyone.
+          A D&D 5e multiplayer RPG shaped by everyone.
           <br />
           Play on the web or through Discord.
         </p>
@@ -50,34 +50,34 @@ export default function Home() {
       <section id="about" className="about">
         <p className="eyebrow">THE WORLD</p>
 
-        <h2>Everyone's story. Help shape it.</h2>
+        <h2>An epic quest awaits. Will you answer the call?</h2>
 
         <div className="cards">
           <div className="card">
-            <h3>Story</h3>
+            <h3>Play Anywhere</h3>
             <p>
-              Explore a world where everyone's decision shapes it.
+              Play on the website or through Discord. Your progress is synced across both.
             </p>
           </div>
 
           <div className="card">
-            <h3>Choices</h3>
+            <h3>D&D 5e Rules</h3>
             <p>
-              Every decision can change the world and your outcome.
+              Full D&D 5e mechanics — classes, races, spells, combat, and leveling.
             </p>
           </div>
 
           <div className="card">
-            <h3>Discord</h3>
+            <h3>Multiplayer Quests</h3>
             <p>
-              Continue your adventure through the Vorpium Discord bot.
+              Solo quests, party adventures, and server-wide guild raids.
             </p>
           </div>
         </div>
       </section>
 
       <footer>
-        © 2026 Vorpium
+        © 2026 Feather Quest
       </footer>
     </main>
   );

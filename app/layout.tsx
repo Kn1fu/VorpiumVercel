@@ -1,8 +1,8 @@
 import "./globals.css";
 
 export const metadata = {
-  title: "Vorpium",
-  description: "Everyone's story built together.",
+  title: "Feather Quest",
+  description: "A D&D 5e multiplayer RPG. Play on the web or through Discord.",
 };
 
 export default function RootLayout({

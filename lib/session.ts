@@ -108,7 +108,7 @@ export function verifyToken(
   return payload;
 }
 
-export const SESSION_COOKIE_NAME = "vorpium_session";
+export const SESSION_COOKIE_NAME = "featherquest_session";
 
 export const SESSION_TTL_SECONDS = 60 * 60 * 24 * 90; // 90 days
 
