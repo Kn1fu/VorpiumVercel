@@ -51,48 +51,9 @@ export default async function PlayPage() {
     [user.id]
   );
 
-  // No character yet — show a simple redirect page
+  // No character yet — redirect to character creation
   if (characterResult.rows.length === 0) {
-    return (
-      <main className="min-h-screen bg-gray-950 text-white">
-        <nav className="border-b border-white/10">
-          <div className="max-w-6xl mx-auto px-6 py-5 flex items-center justify-between">
-            <div className="text-xl font-bold tracking-[0.25em]">
-              FEATHER QUEST
-            </div>
-            <div className="text-sm text-gray-400">
-              {user.username}
-            </div>
-          </div>
-        </nav>
-
-        <section className="max-w-4xl mx-auto px-6 py-24 text-center">
-          <p className="text-sm tracking-[0.35em] text-indigo-400 mb-4">
-            CREATE YOUR CHARACTER
-          </p>
-
-          <h1 className="text-5xl md:text-6xl font-bold mb-6">
-            Who will you become?
-          </h1>
-
-          <p className="text-gray-400 text-lg max-w-xl mx-auto mb-10">
-            Every story begins with a name. Choose the name your
-            character will carry throughout the world of Feather Quest.
-          </p>
-
-          <a
-            href="/play/create"
-            className="px-8 py-4 rounded-xl bg-indigo-500 hover:bg-indigo-600 transition font-semibold inline-block"
-          >
-            BEGIN CHARACTER CREATION
-          </a>
-        </section>
-
-        <footer className="border-t border-white/10 py-8 text-center text-sm text-gray-600">
-          © 2026 Feather Quest
-        </footer>
-      </main>
-    );
+    redirect("/play/create");
   }
 
   // Character exists — render the game client
