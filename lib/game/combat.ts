@@ -5,6 +5,7 @@ export interface Combatant {
   name: string;
   hp: number;
   maxHp: number;
+  tempHp: number;
   ac: number;
   initiative: number;
   isPlayer: boolean;
@@ -186,9 +187,9 @@ export function applyDamage(
   }
 
   // Apply damage
-  if (updated.temp_hp > 0) {
-    const absorbed = Math.min(updated.temp_hp, damage);
-    updated.temp_hp -= absorbed;
+  if (updated.tempHp > 0) {
+    const absorbed = Math.min(updated.tempHp, damage);
+    updated.tempHp -= absorbed;
     const remaining = damage - absorbed;
     updated.hp = Math.max(0, updated.hp - remaining);
     message = `${updated.name} takes **${damage}** damage (${absorbed} absorbed by temp HP, ${remaining} to HP). HP: ${updated.hp}/${updated.maxHp}`;
@@ -213,6 +214,7 @@ export function applyHealing(
   amount: number
 ): { combatant: Combatant; message: string } {
   const updated = { ...combatant };
+  let message = "";
 
   if (amount <= 0) return { combatant: updated, message: "No healing applied." };
 

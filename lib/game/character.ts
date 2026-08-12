@@ -1,5 +1,6 @@
 import { Ability, ABILITIES } from "./abilities";
-import { rollAbilityScores, abilityMod } from "./combat";
+import { rollAbilityScores } from "./dice";
+import { abilityMod } from "./combat";
 import { ClassData, RaceData, BACKGROUNDS } from "./classes";
 
 export interface CharacterStats {

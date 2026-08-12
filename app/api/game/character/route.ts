@@ -4,6 +4,9 @@ import {
   SESSION_COOKIE_NAME,
   verifySessionToken,
 } from "lib/session";
+import { RACES, CLASSES, BACKGROUNDS } from "lib/game/classes";
+import { generateAbilityScores } from "lib/game/character";
+import { abilityMod } from "lib/game/combat";
 
 export const dynamic = "force-dynamic";
 

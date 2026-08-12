@@ -1,9 +1,11 @@
 import {
   Client,
+  ClientOptions,
   GatewayIntentBits,
   Collection,
   REST,
   Routes,
+  SlashCommandBuilder,
 } from "discord.js";
 import { Pool } from "pg";
 import path from "path";
@@ -12,6 +14,14 @@ import { fileURLToPath } from "url";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+
+// Extend Client to include commands collection
+interface FeatherQuestClient extends Client {
+  commands: Collection<string, {
+    data: SlashCommandBuilder;
+    execute: (interaction: any, pool: Pool) => Promise<void>;
+  }>;
+}
 
 // Database connection (same PostgreSQL the web app uses)
 const pool = new Pool({
@@ -26,7 +36,7 @@ const client = new Client({
     GatewayIntentBits.DirectMessages,
     GatewayIntentBits.MessageContent,
   ],
-});
+}) as FeatherQuestClient;
 
 // Command collection
 client.commands = new Collection();

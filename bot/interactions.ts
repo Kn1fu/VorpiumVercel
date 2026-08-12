@@ -1,7 +1,14 @@
 import { EmbedBuilder } from "discord.js";
 import { Pool } from "pg";
-import { rollDice } from "../../lib/game/dice";
-import { abilityMod } from "../../lib/game/combat";
+import { rollDice } from "../lib/game/dice";
+import { abilityMod, profBonus } from "../lib/game/combat";
+import type { ClassData, RaceData } from "../lib/game/classes";
+
+interface BackgroundData {
+  id: number;
+  name: string;
+  skills: string[];
+}
 
 /**
  * Handle all button and select menu interactions for Feather Quest.
@@ -32,12 +39,12 @@ export async function handleInteraction(interaction: any, pool: Pool) {
     state.step = "class";
     stateMap.set(discordId, state);
 
-    const { CLASSES } = await import("../../lib/game/classes");
+    const { CLASSES } = await import("../lib/game/classes") as { CLASSES: ClassData[] };
     const classMenu = {
       type: 3,
       custom_id: "create_class",
       placeholder: "Choose your class...",
-      options: CLASSES.map((c) => ({
+      options: CLASSES.map((c: ClassData) => ({
         label: c.name,
         description: `d${c.hitDie} hit die | ${c.primaryStat} primary`,
         value: String(c.id),
@@ -109,12 +116,12 @@ export async function handleInteraction(interaction: any, pool: Pool) {
       .setColor(0x6366f1);
 
     // Background selection
-    const { BACKGROUNDS } = await import("../../lib/game/classes");
+    const { BACKGROUNDS } = await import("../lib/game/classes") as { BACKGROUNDS: BackgroundData[] };
     const bgMenu = {
       type: 3,
       custom_id: "create_background",
       placeholder: "Choose your background...",
-      options: BACKGROUNDS.slice(0, 25).map((b) => ({
+      options: BACKGROUNDS.slice(0, 25).map((b: BackgroundData) => ({
         label: b.name,
         description: b.skills.join(", "),
         value: String(b.id),
@@ -151,11 +158,11 @@ export async function handleInteraction(interaction: any, pool: Pool) {
 
     // Create the character in the database
     const { RACES, CLASSES, BACKGROUNDS } = await import(
-      "../../lib/game/classes"
-    );
-    const race = RACES.find((r) => r.id === state.raceId);
-    const cls = CLASSES.find((c) => c.id === state.classId);
-    const bg = BACKGROUNDS.find((b) => b.id === state.backgroundId);
+      "../lib/game/classes"
+    ) as { RACES: RaceData[]; CLASSES: ClassData[]; BACKGROUNDS: BackgroundData[] };
+    const race = RACES.find((r: RaceData) => r.id === state.raceId);
+    const cls = CLASSES.find((c: ClassData) => c.id === state.classId);
+    const bg = BACKGROUNDS.find((b: BackgroundData) => b.id === state.backgroundId);
 
     if (!race || !cls) {
       return interaction.reply({
