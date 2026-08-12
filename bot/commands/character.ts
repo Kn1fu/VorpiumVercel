@@ -11,6 +11,7 @@ export default {
 
     const result = await pool.query(
       `
+        SELECT
           c.id, c.name, c.level, c.xp, c.hp, c.max_hp, c.current_hp,
           c.ac, c.speed, c.gold, c.alignment, c.location, c.status,
           cl.name AS class_name, cl.hit_die,
