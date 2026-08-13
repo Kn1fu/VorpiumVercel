@@ -146,7 +146,7 @@ export async function PATCH(request: NextRequest) {
               UPDATE inventory SET equipped = false
               WHERE character_id = $1
               AND id != $2
-              AND item_id IN (SELECT id FROM items WHERE type = 'armor' AND type != 'shield')
+              AND item_id IN (SELECT id FROM items WHERE type = 'armor' AND properties->>'type' != 'shield')
             `,
             [charId, inventoryId]
           );
@@ -293,7 +293,7 @@ export async function POST(request: NextRequest) {
       message,
       healed: healAmount,
       currentHp: newHp,
-      maxHp: char.maxHp,
+      maxHp: char.max_hp,
     });
   } catch (error) {
     console.error("Use item failed:", error);

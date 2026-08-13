@@ -233,7 +233,7 @@ export async function POST(request: NextRequest) {
         gpAward,
         deathSave,
         playerHp: char.current_hp,
-        playerMaxHp: char.maxHp,
+        playerMaxHp: char.max_hp,
       });
     }
 
@@ -283,7 +283,7 @@ export async function POST(request: NextRequest) {
           message: "You fail to flee!",
           enemyAttack,
           playerHp: char.current_hp,
-          playerMaxHp: char.maxHp,
+          playerMaxHp: char.max_hp,
         });
       }
     }

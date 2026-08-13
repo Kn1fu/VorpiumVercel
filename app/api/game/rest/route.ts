@@ -80,7 +80,7 @@ export async function POST(request: NextRequest) {
         type: "short",
         healed: newHp - oldHp,
         currentHp: newHp,
-        maxHp: char.maxHp,
+        maxHp: char.max_hp,
         message: `Short rest: rolled ${hitDiceCount}d${char.hit_die} = ${diceRoll.rolls.join(", ")}. Healed ${newHp - oldHp} HP.`,
       });
     }
@@ -93,10 +93,10 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({
       type: "long",
-      healed: char.maxHp - oldHp,
-      currentHp: char.maxHp,
-      maxHp: char.maxHp,
-      message: `Long rest: fully restored to ${char.maxHp} HP.`,
+      healed: char.max_hp - oldHp,
+      currentHp: char.max_hp,
+      maxHp: char.max_hp,
+      message: `Long rest: fully restored to ${char.max_hp} HP.`,
     });
   } catch (error) {
     console.error("Rest failed:", error);

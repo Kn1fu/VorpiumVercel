@@ -22,7 +22,8 @@ INSERT INTO classes (name, hit_die, primary_stat, description) VALUES
   ('Barbarian',  12, 'STR', 'A fierce warrior who can enter a battle rage, shrugging off pain.'),
   ('Bard',       8,  'CHA', 'An inspiring magician whose power echoes the music of creation.'),
   ('Druid',      8,  'WIS', 'A priest of the Old Faith, wielding the powers of nature and shape-shifting.'),
-  ('Monk',       8,  'DEX', 'A master of martial arts, harnessing the power of the body and the universe.');
+  ('Monk',       8,  'DEX', 'A master of martial arts, harnessing the power of the body and the universe.')
+ON CONFLICT (name) DO NOTHING;
 
 -- ============================================================
 -- RACES
@@ -48,7 +49,8 @@ INSERT INTO races (name, speed, str_bonus, dex_bonus, con_bonus, int_bonus, wis_
   ('Dragonborn', 30, 2, 0, 0, 0, 0, 1, 'Dragonborn carry the blood of dragons, wielding breath weapons.'),
   ('Tiefling',   30, 0, 0, 0, 1, 0, 2, 'Tieflings are descendants of infernal beings, marked by their heritage.'),
   ('Half-Elf',   30, 0, 0, 0, 1, 1, 2, 'Half-elves combine human curiosity with elven grace.'),
-  ('Half-Orc',   30, 2, 0, 1, 0, 0, 0, 'Half-orcs blend human versatility with orcish strength.');
+  ('Half-Orc',   30, 2, 0, 1, 0, 0, 0, 'Half-orcs blend human versatility with orcish strength.')
+ON CONFLICT (name) DO NOTHING;
 
 -- ============================================================
 -- BACKGROUNDS
@@ -73,7 +75,8 @@ INSERT INTO backgrounds (name, skill_prof, description) VALUES
   ('Hermit',         ARRAY['Medicine','Religion'],         'You lived in seclusion for a formative part of your life.'),
   ('Outlander',      ARRAY['Athletics','Survival'],       'You grew up in the wilds, far from civilization.'),
   ('Sailor',         ARRAY['Athletics','Perception'],     'You sailed on a seagoing vessel for years.'),
-  ('Urchin',         ARRAY['Sleight of Hand','Stealth'],  'You grew up on the streets alone, orphaned, and poor.');
+  ('Urchin',         ARRAY['Sleight of Hand','Stealth'],  'You grew up on the streets alone, orphaned, and poor.')
+ON CONFLICT (name) DO NOTHING;
 
 -- ============================================================
 -- SPELLS
@@ -99,7 +102,8 @@ INSERT INTO spells (name, level, school, damage, description) VALUES
   ('Light',          0, 'Evocation',     NULL,            'You touch an object and it sheds bright light.'),
   ('Mending',        0, 'Transmutation', NULL,            'This spell repairs a single break or tear in an object.'),
   ('Sacred Flame',   0, 'Evocation',     '1d8 radiant',  'A flame-like radiance descends on a target.'),
-  ('Eldritch Blast', 0, 'Evocation',     '1d10 force',   'A beam of crackling energy streaks toward a creature.');
+  ('Eldritch Blast', 0, 'Evocation',     '1d10 force',   'A beam of crackling energy streaks toward a creature.')
+ON CONFLICT (name) DO NOTHING;
 
 -- Level 1
 INSERT INTO spells (name, level, school, damage, description, save_type) VALUES
@@ -110,14 +114,16 @@ INSERT INTO spells (name, level, school, damage, description, save_type) VALUES
   ('Detect Magic',     1, 'Divination',    NULL,            'You sense the presence of magic within 30 feet.', NULL),
   ('Sleep',            1, 'Enchantment',   NULL,            'Send creatures into a magical slumber.', 'WIS'),
   ('Mage Hand',        1, 'Conjuration',   NULL,            'A spectral, floating hand appears.', NULL),
-  ('Thunder Smite',    1, 'Evocation',     '2d6 thunder',  'Your weapon rings with thunder on a hit.', NULL);
+  ('Thunder Smite',    1, 'Evocation',     '2d6 thunder',  'Your weapon rings with thunder on a hit.', NULL)
+ON CONFLICT (name) DO NOTHING;
 
 -- Level 2
 INSERT INTO spells (name, level, school, damage, description, save_type) VALUES
   ('Scorching Ray',   2, 'Evocation',     '2d6 fire',     'You create three rays of fire.', NULL),
   ('Mirror Image',    2, 'Illusion',      NULL,            'Three illusory duplicates of yourself appear.', NULL),
   ('Spiritual Weapon',2, 'Evocation',     '1d8+mod force','A spectral weapon attacks creatures you choose.', NULL),
-  ('Misty Step',      2, 'Conjuration',   NULL,            'You teleport up to 30 feet to a spot you can see.', NULL);
+  ('Misty Step',      2, 'Conjuration',   NULL,            'You teleport up to 30 feet to a spot you can see.', NULL)
+ON CONFLICT (name) DO NOTHING;
 
 -- ============================================================
 -- ITEMS
@@ -146,7 +152,8 @@ INSERT INTO items (name, type, rarity, price_gp, damage, weight_lbs, properties)
   ('Shortbow',      'weapon', 'Common', 25,  '1d6 piercing', 1.0,  '{"range":"80/320"}'),
   ('Light Crossbow','weapon', 'Common', 25,  '1d8 piercing', 5.0,  '{"loading":true,"range":"80/320"}'),
   ('Quarterstaff',  'weapon', 'Common', 5,   '1d6 bludgeoning', 4.0,'{"versatile":"1d8"}'),
-  ('Warhammer',     'weapon', 'Common', 15,  '1d8 bludgeoning',2.0,'{"versatile":"1d10"}');
+  ('Warhammer',     'weapon', 'Common', 15,  '1d8 bludgeoning',2.0,'{"versatile":"1d10"}')
+ON CONFLICT (name) DO NOTHING;
 
 -- Armor
 INSERT INTO items (name, type, rarity, price_gp, ac_bonus, weight_lbs, properties) VALUES
@@ -159,13 +166,15 @@ INSERT INTO items (name, type, rarity, price_gp, ac_bonus, weight_lbs, propertie
   ('Chain Mail',        'armor', 'Common', 150, 16, 55.0, '{"type":"heavy","stealth_disadv":true}'),
   ('Splint',            'armor', 'Common', 600, 17, 60.0, '{"type":"heavy","stealth_disadv":true}'),
   ('Plate',             'armor', 'Rare',   1500,18, 65.0, '{"type":"heavy","stealth_disadv":true}'),
-  ('Shield',            'armor', 'Common', 10,  2,  6.0,  '{"type":"shield"}');
+  ('Shield',            'armor', 'Common', 10,  2,  6.0,  '{"type":"shield"}')
+ON CONFLICT (name) DO NOTHING;
 
 -- Potions
 INSERT INTO items (name, type, rarity, price_gp, description, weight_lbs) VALUES
   ('Potion of Healing',    'potion', 'Common',   50,   'Regain 2d4+2 hit points.', 0.5),
   ('Potion of Greater Healing', 'potion', 'Uncommon', 150, 'Regain 4d4+4 hit points.', 0.5),
-  ('Potion of Fire Breath','potion', 'Uncommon', 500,  'Exhale fire in a 15-foot cone for 4d6 fire damage.', 0.5);
+  ('Potion of Fire Breath','potion', 'Uncommon', 500,  'Exhale fire in a 15-foot cone for 4d6 fire damage.', 0.5)
+ON CONFLICT (name) DO NOTHING;
 
 -- Misc
 INSERT INTO items (name, type, rarity, price_gp, description, weight_lbs) VALUES
@@ -173,14 +182,15 @@ INSERT INTO items (name, type, rarity, price_gp, description, weight_lbs) VALUES
   ('Rope (50 ft)',     'misc', 'Common', 1,   'Hempen rope, 50 feet long.', 10.0),
   ('Torch',            'misc', 'Common', 1,   'Burns for 1 hour, sheds bright light.', 1.0),
   ('Healer''s Kit',    'misc', 'Common', 5,   'Stabilizing creature with zero HP.', 3.0),
-  ('Lockpicks',        'misc', 'Common', 25,  'Thieves'' tools for picking locks.', 1.0);
+  ('Lockpicks',        'misc', 'Common', 25,  'Thieves'' tools for picking locks.', 1.0)
+ON CONFLICT (name) DO NOTHING;
 
 -- ============================================================
 -- QUESTS
 -- ============================================================
 CREATE TABLE IF NOT EXISTS quests (
   id            SERIAL PRIMARY KEY,
-  name          TEXT NOT NULL,
+  name          TEXT NOT NULL UNIQUE,
   description   TEXT,
   min_level     INT NOT NULL DEFAULT 1,
   max_level     INT NOT NULL DEFAULT 20,
@@ -199,7 +209,8 @@ INSERT INTO quests (name, description, min_level, max_level, xp_reward, gp_rewar
   ('The Missing Merchant', 'A merchant disappeared on the road to the next town. Investigate.', 2, 5, 200, 50, 'solo', 'Normal'),
   ('Bandit Ambush',       'Bandits are raiding travelers on the King''s Road. Stop them.', 3, 6, 350, 100, 'party', 'Normal'),
   ('The Goblin Cave',     'A goblin warband has been spotted in the hills. Clear the cave.', 3, 8, 500, 150, 'party', 'Hard'),
-  ('Dragon''s Hoard',     'An ancient dragon terrorizes the region. Slay it and claim its hoard.', 10, 20, 5000, 2000, 'guild', 'Deadly');
+  ('Dragon''s Hoard',     'An ancient dragon terrorizes the region. Slay it and claim its hoard.', 10, 20, 5000, 2000, 'guild', 'Deadly')
+ON CONFLICT (name) DO NOTHING;
 
 -- ============================================================
 -- MAIN CHARACTER TABLE (expand existing)

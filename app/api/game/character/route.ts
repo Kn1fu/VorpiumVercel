@@ -97,16 +97,17 @@ export async function POST(request: NextRequest) {
     const charResult = await pool.query(
       `
         INSERT INTO characters
-          (user_id, name, class_id, race_id, background_id, level, xp,
+          (user_id, name, race, class_id, race_id, background_id, level, xp,
            hp, max_hp, current_hp, ac, speed, gold, location, status)
         VALUES
-          ((SELECT id FROM users WHERE discord_id = $1), $2, $3, $4, $5,
-           1, 0, $6, $6, $6, $7, $8, 50, 'Town Square', 'alive')
+          ((SELECT id FROM users WHERE discord_id = $1), $2, $3, $4, $5, $6,
+           1, 0, $7, $7, $7, $8, $9, 50, 'Town Square', 'alive')
         RETURNING id
       `,
       [
         discordId,
         name,
+        race.name,
         cls.id,
         race.id,
         bg?.id || null,
@@ -193,10 +194,12 @@ export async function POST(request: NextRequest) {
         location: "Town Square",
       },
     });
-  } catch (error) {
-    console.error("Character creation failed:", error);
+  } catch (error: any) {
+    console.error("Character creation failed:", error?.message || error);
+    console.error("Error detail:", error?.detail);
+    console.error("Error code:", error?.code);
     return NextResponse.json(
-      { error: "Failed to create character" },
+      { error: "Failed to create character", detail: error?.detail || error?.message },
       { status: 500 }
     );
   }
