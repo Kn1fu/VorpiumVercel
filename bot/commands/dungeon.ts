@@ -66,7 +66,8 @@ export default {
         `SELECT p.id as party_id, p.leader_id
          FROM party_members pm
          JOIN parties p ON pm.party_id = p.id
-         JOIN users u ON pm.user_id = u.id
+         JOIN characters c ON pm.character_id = c.id
+         JOIN users u ON c.user_id = u.id
          WHERE u.discord_id = $1`,
         [discordId]
       );
@@ -82,7 +83,7 @@ export default {
       }
 
       const { party_id: partyId, leader_id: leaderId } = partyRes.rows[0];
-      if (leaderId !== userId) {
+      if (leaderId !== characterId) {
         return interaction.reply({
           embeds: [
             new EmbedBuilder()
@@ -117,7 +118,7 @@ export default {
       });
 
       await pool.query(
-        `INSERT INTO dungeon_runs (party_id, current_room, status, rooms)
+        `INSERT INTO dungeon_runs (party_id, current_room, status, room_data)
          VALUES ($1, 1, 'active', $2)`,
         [partyId, JSON.stringify(rooms)]
       );
@@ -139,7 +140,8 @@ export default {
       const dungeonRes = await pool.query(
         `SELECT dr.* FROM dungeon_runs dr
          JOIN party_members pm ON dr.party_id = pm.party_id
-         JOIN users u ON pm.user_id = u.id
+         JOIN characters c ON pm.character_id = c.id
+         JOIN users u ON c.user_id = u.id
          WHERE u.discord_id = $1 AND dr.status = 'active'`,
         [discordId]
       );
@@ -156,14 +158,13 @@ export default {
       }
 
       const dungeon = dungeonRes.rows[0];
-      const rooms = JSON.parse(dungeon.rooms);
+      const rooms = JSON.parse(dungeon.room_data);
       const currentRoom = rooms[dungeon.current_room - 1];
 
       const membersRes = await pool.query(
         `SELECT c.name, c.current_hp, c.max_hp
          FROM party_members pm
-         JOIN users u ON pm.user_id = u.id
-         JOIN characters c ON u.id = c.user_id
+         JOIN characters c ON pm.character_id = c.id
          WHERE pm.party_id = $1`,
         [dungeon.party_id]
       );
@@ -186,7 +187,8 @@ export default {
       const dungeonRes = await pool.query(
         `SELECT dr.* FROM dungeon_runs dr
          JOIN party_members pm ON dr.party_id = pm.party_id
-         JOIN users u ON pm.user_id = u.id
+         JOIN characters c ON pm.character_id = c.id
+         JOIN users u ON c.user_id = u.id
          WHERE u.discord_id = $1 AND dr.status = 'active'`,
         [discordId]
       );
@@ -203,7 +205,7 @@ export default {
       }
 
       const dungeon = dungeonRes.rows[0];
-      const rooms = JSON.parse(dungeon.rooms);
+      const rooms = JSON.parse(dungeon.room_data);
       const current = rooms[dungeon.current_room - 1];
 
       if (!current.cleared) {
@@ -255,7 +257,8 @@ export default {
       const dungeonRes = await pool.query(
         `SELECT dr.* FROM dungeon_runs dr
          JOIN party_members pm ON dr.party_id = pm.party_id
-         JOIN users u ON pm.user_id = u.id
+         JOIN characters c ON pm.character_id = c.id
+         JOIN users u ON c.user_id = u.id
          WHERE u.discord_id = $1 AND dr.status = 'active'`,
         [discordId]
       );
@@ -272,7 +275,7 @@ export default {
       }
 
       const dungeon = dungeonRes.rows[0];
-      const rooms = JSON.parse(dungeon.rooms);
+      const rooms = JSON.parse(dungeon.room_data);
       const room = rooms[dungeon.current_room - 1];
 
       if (room.cleared) {
@@ -327,7 +330,7 @@ export default {
         rooms[dungeon.current_room - 1] = room;
       }
 
-      await pool.query(`UPDATE dungeon_runs SET rooms = $1 WHERE id = $2`, [
+      await pool.query(`UPDATE dungeon_runs SET room_data = $1 WHERE id = $2`, [
         JSON.stringify(rooms),
         dungeon.id,
       ]);
@@ -351,7 +354,8 @@ export default {
       const dungeonRes = await pool.query(
         `SELECT dr.* FROM dungeon_runs dr
          JOIN party_members pm ON dr.party_id = pm.party_id
-         JOIN users u ON pm.user_id = u.id
+         JOIN characters c ON pm.character_id = c.id
+         JOIN users u ON c.user_id = u.id
          WHERE u.discord_id = $1 AND dr.status = 'completed'`,
         [discordId]
       );
@@ -368,7 +372,7 @@ export default {
       }
 
       const dungeon = dungeonRes.rows[0];
-      const rooms = JSON.parse(dungeon.rooms);
+      const rooms = JSON.parse(dungeon.room_data);
       const bossLoot = rooms[4]?.cleared;
 
       const availableLoot = bossLoot
@@ -376,17 +380,23 @@ export default {
         : LOOT_TABLE.filter((l) => l.power <= 3);
       const lootItem = availableLoot[Math.floor(Math.random() * availableLoot.length)];
 
-      await pool.query(
-        `INSERT INTO inventory (character_id, item_name, item_type, power)
-         VALUES ($1, $2, $3, $4)`,
-        [characterId, lootItem.name, lootItem.type, lootItem.power]
+      const itemRes = await pool.query(
+        `SELECT id FROM items WHERE LOWER(name) = LOWER($1) LIMIT 1`,
+        [lootItem.name]
       );
+      if (itemRes.rows.length > 0) {
+        await pool.query(
+          `INSERT INTO inventory (character_id, item_id, quantity, equipped)
+           VALUES ($1, $2, 1, false)`,
+          [characterId, itemRes.rows[0].id]
+        );
+      }
 
       const xpReward = bossLoot ? 100 : 30;
       const goldReward = bossLoot ? 50 : 15;
       await pool.query(
         `UPDATE characters
-         SET experience = experience + $1, gold = gold + $2
+         SET xp = xp + $1, gold = gold + $2
          WHERE id = $3`,
         [xpReward, goldReward, characterId]
       );

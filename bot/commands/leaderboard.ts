@@ -19,10 +19,10 @@ export default {
     let statLabel = "";
 
     if (sub === "level") {
-      query = `SELECT c.name, c.level, cl.name as class_name, c.experience as stat
+      query = `SELECT c.name, c.level, cl.name as class_name, c.xp as stat
                FROM characters c
                LEFT JOIN classes cl ON c.class_id = cl.id
-               ORDER BY c.level DESC, c.experience DESC
+               ORDER BY c.level DESC, c.xp DESC
                LIMIT 20`;
       statLabel = "Level";
     } else if (sub === "gold") {
@@ -33,17 +33,19 @@ export default {
                LIMIT 20`;
       statLabel = "Gold";
     } else if (sub === "quests") {
-      query = `SELECT c.name, c.level, cl.name as class_name, c.quests_completed as stat
+      query = `SELECT c.name, c.level, cl.name as class_name, COUNT(pq.id) AS stat
                FROM characters c
                LEFT JOIN classes cl ON c.class_id = cl.id
-               ORDER BY c.quests_completed DESC
+               LEFT JOIN player_quests pq ON pq.character_id = c.id AND pq.status = 'completed'
+               GROUP BY c.id, c.name, c.level, cl.name
+               ORDER BY stat DESC
                LIMIT 20`;
       statLabel = "Quests Completed";
     } else if (sub === "xp") {
-      query = `SELECT c.name, c.level, cl.name as class_name, c.experience as stat
+      query = `SELECT c.name, c.level, cl.name as class_name, c.xp as stat
                FROM characters c
                LEFT JOIN classes cl ON c.class_id = cl.id
-               ORDER BY c.experience DESC
+               ORDER BY c.xp DESC
                LIMIT 20`;
       statLabel = "Total XP";
     }
