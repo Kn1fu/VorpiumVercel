@@ -1,7 +1,7 @@
 import { SlashCommandBuilder, EmbedBuilder } from "discord.js";
 import { Pool } from "pg";
-import { rollDice } from "../../lib/game/dice";
-import { abilityMod, profBonus } from "../../lib/game/combat";
+import { rollDice } from "../../../lib/game/dice";
+import { abilityMod, profBonus } from "../../../lib/game/combat";
 
 export default {
   data: new SlashCommandBuilder()

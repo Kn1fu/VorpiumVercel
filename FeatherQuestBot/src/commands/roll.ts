@@ -1,6 +1,6 @@
 import { SlashCommandBuilder } from "discord.js";
 import { Pool } from "pg";
-import { rollDice } from "../../lib/game/dice";
+import { rollDice } from "../../../lib/game/dice";
 
 export default {
   data: new SlashCommandBuilder()

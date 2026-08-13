@@ -7,9 +7,9 @@ import {
   ButtonStyle,
 } from "discord.js";
 import { Pool } from "pg";
-import { RACES, CLASSES, BACKGROUNDS } from "../../lib/game/classes";
-import { generateAbilityScores } from "../../lib/game/character";
-import { abilityMod } from "../../lib/game/combat";
+import { RACES, CLASSES, BACKGROUNDS } from "../../../lib/game/classes";
+import { generateAbilityScores } from "../../../lib/game/character";
+import { abilityMod } from "../../../lib/game/combat";
 
 export default {
   data: new SlashCommandBuilder()

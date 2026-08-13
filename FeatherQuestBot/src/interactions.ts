@@ -1,8 +1,8 @@
 import { EmbedBuilder } from "discord.js";
 import { Pool } from "pg";
-import { rollDice } from "../lib/game/dice";
-import { abilityMod, profBonus } from "../lib/game/combat";
-import type { ClassData, RaceData } from "../lib/game/classes";
+import { rollDice } from "../../lib/game/dice";
+import { abilityMod, profBonus } from "../../lib/game/combat";
+import type { ClassData, RaceData } from "../../lib/game/classes";
 
 interface BackgroundData {
   id: number;
@@ -39,7 +39,7 @@ export async function handleInteraction(interaction: any, pool: Pool) {
     state.step = "class";
     stateMap.set(discordId, state);
 
-    const { CLASSES } = await import("../lib/game/classes") as { CLASSES: ClassData[] };
+    const { CLASSES } = await import("../../lib/game/classes") as { CLASSES: ClassData[] };
     const classMenu = {
       type: 3,
       custom_id: "create_class",
@@ -116,7 +116,7 @@ export async function handleInteraction(interaction: any, pool: Pool) {
       .setColor(0x6366f1);
 
     // Background selection
-    const { BACKGROUNDS } = await import("../lib/game/classes") as { BACKGROUNDS: BackgroundData[] };
+    const { BACKGROUNDS } = await import("../../lib/game/classes") as { BACKGROUNDS: BackgroundData[] };
     const bgMenu = {
       type: 3,
       custom_id: "create_background",
@@ -158,7 +158,7 @@ export async function handleInteraction(interaction: any, pool: Pool) {
 
     // Create the character in the database
     const { RACES, CLASSES, BACKGROUNDS } = await import(
-      "../lib/game/classes"
+      "../../lib/game/classes"
     ) as { RACES: RaceData[]; CLASSES: ClassData[]; BACKGROUNDS: BackgroundData[] };
     const race = RACES.find((r: RaceData) => r.id === state.raceId);
     const cls = CLASSES.find((c: ClassData) => c.id === state.classId);
